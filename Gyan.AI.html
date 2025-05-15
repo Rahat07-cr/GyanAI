@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gyan AI - The Digital Guru of New India</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000000;
+    color: #f44336;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    background: #2b0000;
+    padding: 1rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px #f4433633;
+    user-select: none;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    color: #ff4d4d;
+    text-shadow: 0 0 5px #f44336;
+  }
+  header p {
+    margin: 0;
+    font-style: italic;
+    color: #ff9999;
+    margin-top: 4px;
+  }
+  #chat-container {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    overflow-y: auto;
+    background: #1a0000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .chat-bubble {
+    max-width: 70%;
+    padding: 1rem;
+    border-radius: 15px;
+    line-height: 1.4;
+    font-size: 1rem;
+    word-wrap: break-word;
+    box-shadow: 0 0 8px #f4433622;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  .user {
+    background: #f44336;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+    box-shadow: 0 0 15px #ff0000aa;
+  }
+  .bot {
+    background: #330000;
+    border: 1px solid #f44336;
+    color: #ff9999;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+    box-shadow: 0 0 15px #f4433622;
+  }
+  /* Media for images/videos in chat */
+  .chat-bubble img, .chat-bubble video {
+    max-width: 100%;
+    border-radius: 12px;
+    margin-top: 0.3rem;
+    box-shadow: 0 0 12px #f44336aa;
+  }
+  .chat-bubble video {
+    max-height: 300px;
+  }
+  /* Input area */
+  #input-area {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    background: #2b0000;
+    align-items: center;
+    box-shadow: 0 -2px 8px #f4433633;
+  }
+  #text-input {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    background: #330000;
+    color: #ff9999;
+    box-shadow: inset 0 0 5px #ff4444;
+    transition: box-shadow 0.3s ease;
+  }
+  #text-input:focus {
+    box-shadow: inset 0 0 8px #f44336;
+  }
+  button {
+    background: #f44336;
+    border: none;
+    color: white;
+    padding: 0.55rem 1.1rem;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ff0000aa;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #ff6666;
+  }
+  button:active {
+    transform: scale(0.95);
+  }
+  #mic-btn svg {
+    fill: white;
+    width: 28px;
+    height: 28px;
+  }
+  #mic-btn.active {
+    background: #ff0000;
+    box-shadow: 0 0 15px #ff0000ee;
+  }
+  #file-input {
+    display: none;
+  }
+  label#file-label {
+    background: #f44336;
+    padding: 0.5rem 0.7rem;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ff0000aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  label#file-label svg {
+    fill: white;
+    width: 24px;
+    height: 24px;
+  }
+  footer {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    color: #ff4d4d;
+    background: #1a0000;
+    user-select: none;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(5px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gyan AI</h1>
+  <p>The Digital Guru of New India</p>
+</header>
+
+<div id="chat-container" role="log" aria-live="polite" aria-relevant="additions">
+  <!-- Chat bubbles appear here -->
+</div>
+
+<div id="input-area">
+  <label for="file-input" id="file-label" title="Send Image or Video">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zm-11 3l2.5 3 3-4 4 5H7l3-4z"/></svg>
+  </label>
+  <input type="file" id="file-input" accept="image/,video/" />
+  <input type="text" id="text-input" placeholder="Type a message..." aria-label="Type your message" />
+  <button id="send-btn" title="Send Message">→</button>
+  <button id="mic-btn" title="Click to speak">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14a2 2 0 0 0 2-2V7a2 2 0 0 0-4 0v5a2 2 0 0 0 2 2zm4-2a4 4 0 0 1-8 0H6a6 6 0 0 0 12 0h-2zm-4 7c3 0 5.5-2.46 5.5-5.5h-2c0 1.933-1.567 3.5-3.5 3.5s-3.5-1.567-3.5-3.5h-2c0 3.04 2.5 5.5 5.5 5.5z"/></svg>
+  </button>
+</div>
+
+<footer>
+  © 2025 Gyan AI | Built in India by <strong>Rahat Ahmad</strong>
+</footer>
+
+<script>
+  const chatContainer = document.getElementById('chat-container');
+  const micBtn = document.getElementById('mic-btn');
+  const sendBtn = document.getElementById('send-btn');
+  const textInput = document.getElementById('text-input');
+  const fileInput = document.getElementById('file-input');
+
+  // Speech Recognition setup
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition;
+  let listening = false;
+  if (!SpeechRecognition) {
+    alert('Sorry, your browser does not support Speech Recognition.');
+  } else {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      listening = true;
+      micBtn.classList.add('active');
+    };
+    recognition.onend = () => {
+      listening = false;
+      micBtn.classList.remove('active');
+    };
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      addMessage(transcript, 'user');
+      getBotResponse(transcript);
+    };
+  }
+
+  micBtn.addEventListener('click', () => {
+    if (!recognition) return;
+    if (listening) {
+      recognition.stop();
+    } else {
+      recognition.start();
+    }
+  });
+
+  sendBtn.addEventListener('click', () => {
+    sendTextMessage();
+  });
+
+  textInput.addEventListener('keypress',
+  
